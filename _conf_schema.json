@@ -1,0 +1,52 @@
+{
+  "enable": {
+    "description": "插件总开关：关闭后不做任何处理（恢复 AstrBot 原生行为，历史图片会原样重发）",
+    "type": "bool",
+    "default": true
+  },
+  "dry_run": {
+    "description": "演习模式：只记日志说明「本次将剥离几张图、其中几张没有描述」，不修改请求体、也不生成图片描述。首次启用请先保持开启，观察日志与数据库里的图片分布对账后再关闭",
+    "type": "bool",
+    "default": true
+  },
+  "persist_strip": {
+    "description": "【危险，默认关闭】把剥离结果同时写回会话历史。AstrBot 会把本轮请求所用的消息列表整体覆盖写回 conversations 表，所以在钩子里原地改写 req.contexts 会被持久化。开启后 DB 里的历史图片将被永久替换成文字（DB 显著瘦身，但不可逆，请先备份 data_v4.db）。默认关闭时剥离只作用于本次请求体，DB 全程不动",
+    "type": "bool",
+    "default": false
+  },
+  "image_keep_rounds": {
+    "description": "图片记忆深度 K：最近 K 轮（按 user 消息计数）里的图片原样保留给模型；更早的图换成文字。0 = 历史图全剥只留文字；1 = 上一张图还能指；默认 2",
+    "type": "int",
+    "default": 2
+  },
+  "enable_caption": {
+    "description": "剥离图片时是否替换成文字描述（[图片：描述]）；关闭则一律用 [图片] 占位",
+    "type": "bool",
+    "default": true
+  },
+  "caption_provider_id": {
+    "description": "用来生成图片描述的提供商 ID；留空 = 自动选第一个声明了 image 模态的提供商",
+    "type": "string",
+    "default": ""
+  },
+  "caption_prompt": {
+    "description": "生成图片描述时使用的提示词",
+    "type": "text",
+    "default": "请用一两句话客观描述这张图片内容"
+  },
+  "caption_timeout_sec": {
+    "description": "后台生成图片描述的超时（秒）；超时该图后续落 [图片] 占位（不影响当次请求）",
+    "type": "int",
+    "default": 20
+  },
+  "caption_max_chars": {
+    "description": "描述文字的最大长度，超出截断；0 表示不截断",
+    "type": "int",
+    "default": 150
+  },
+  "cache_max_entries": {
+    "description": "图片描述缓存条数上限（LRU，落盘在 data/plugin_data/history_image_steward/caption_cache.json）",
+    "type": "int",
+    "default": 1000
+  }
+}
