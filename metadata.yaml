@@ -2,4 +2,4 @@ name: history_image_steward
 desc: 历史图片管家 - 只把最近 K 轮的图片原样发给模型，更早的图换成文字描述或 [图片] 占位，杜绝 base64 历史把请求体撑爆（v1.1 起同图去重折叠）
 version: v1.1.0
 author: NaE
-repo: ""
+repo: "https://github.com/Soul-Charge/astrbot-plugin-history-image-steward"
